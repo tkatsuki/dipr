@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{sweepC}
 \alias{sweepC}
-\title{sweep array with matrix}
+\title{Multiply a number by two}
 \usage{
 sweepC(obj, m, dim, op)
 }
@@ -16,6 +16,6 @@ sweepC(obj, m, dim, op)
 \item{op}{Operation, either - or *}
 }
 \description{
-sweep array with matrix
+Multiply a number by two
 }
 
