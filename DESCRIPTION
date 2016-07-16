@@ -1,7 +1,7 @@
 Package: dipr
 Title: Digital Image Processing with R
 Version: 0.0.0.9000
-Authors@R: person("Takeo", "Katsuki", email = "takeo.katsuki@gmail.com", role = c("aut", "cre"))
+Authors@R: c(person("Takeo", "Katsuki", email = "takeo.katsuki@gmail.com", role = c("aut", "cre")), person("Yuichiro", "Hourai", role = c("aut")))
 Description: dipr provides functions useful for digital image processing.
 Depends:
     R (>= 3.3.1)
