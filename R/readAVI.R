@@ -1,3 +1,7 @@
+#' @useDynLib dipr
+#' @importFrom Rcpp sourceCpp
+NULL
+
 #' A readAVI Function
 #'
 #' This function allows you to load a grayscale AVI file.
@@ -11,8 +15,6 @@
 #' @keywords AVI
 #' @export
 #' @examples
-#' @useDynLib dipr
-#' @importFrom Rcpp sourceCpp
 #' readAVI()
 
 readAVI <- function(filepath, start=1, end=0, skip=0, getFrames=F, crop=c(0,0,0,0), silent=F){

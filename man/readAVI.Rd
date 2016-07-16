@@ -25,5 +25,8 @@ readAVI(filepath, start = 1, end = 0, skip = 0, getFrames = F,
 \description{
 This function allows you to load a grayscale AVI file.
 }
+\examples{
+readAVI()
+}
 \keyword{AVI}
 
