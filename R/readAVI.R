@@ -5,6 +5,8 @@ NULL
 #' A readAVI Function
 #'
 #' This function allows you to load a grayscale AVI file.
+#'
+#' Can handle AVI2 format as well as legacy format.
 #' @param filepath A caracter string of the path to the file. Required.
 #' @param start An integer of the start frame. Default = 1.
 #' @param end An integer of the end frame. Default = 0 (last frame of the file).

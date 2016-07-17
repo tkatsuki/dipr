@@ -7,25 +7,19 @@
 FNCC(a, b)
 }
 \arguments{
-\item{filepath}{A caracter string of the path to the file. Required.}
+\item{a}{A target image of Image object or an array.}
 
-\item{start}{An integer of the start frame. Default = 1.}
-
-\item{end}{An integer of the end frame. Default = 0 (last frame of the file).}
-
-\item{skip}{An integer of skip frame. Default = 0 (read every frame).}
-
-\item{getFrames}{Return number of frames. Default = False.}
-
-\item{crop}{An integer vector depicting the xy coordinate of the top-left corner and the bottom-right corner you want to crop.}
-
-\item{silent}{Whether or not show message. Default = False.}
+\item{b}{A template image of Image object or an array.}
+}
+\value{
+Returns a grayscale image.
 }
 \description{
 These functions perform template matching using SAD (Sum of absolute differences), NCC (Normalized cross correlation), or FNCC (fast normalized cross correlation).
 }
 \examples{
-FNCC()
+demo(TemplateMatchingDemo)
 }
-\keyword{AVI}
+\keyword{Template}
+\keyword{matching}
 

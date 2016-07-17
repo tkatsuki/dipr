@@ -1,17 +1,14 @@
 #' An FNCC Function
 #'
 #' These functions perform template matching using SAD (Sum of absolute differences), NCC (Normalized cross correlation), or FNCC (fast normalized cross correlation).
-#' @param filepath A caracter string of the path to the file. Required.
-#' @param start An integer of the start frame. Default = 1.
-#' @param end An integer of the end frame. Default = 0 (last frame of the file).
-#' @param skip An integer of skip frame. Default = 0 (read every frame).
-#' @param getFrames Return number of frames. Default = False.
-#' @param crop An integer vector depicting the xy coordinate of the top-left corner and the bottom-right corner you want to crop.
-#' @param silent Whether or not show message. Default = False.
-#' @keywords AVI
+#'
+#' @param a A target image of Image object or an array.
+#' @param b A template image of Image object or an array.
+#' @keywords Template matching
+#' @return Returns a grayscale image.
 #' @export
 #' @examples
-#' FNCC()
+#' demo(TemplateMatchingDemo)
 
 FNCC <- function(a,b){
   a <- a - sum(a)/length(a)
