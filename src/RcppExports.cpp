@@ -5,6 +5,47 @@
 
 using namespace Rcpp;
 
+// rollmeanimgC
+NumericVector rollmeanimgC(SEXP obj, IntegerVector dim, int n);
+RcppExport SEXP dipr_rollmeanimgC(SEXP objSEXP, SEXP dimSEXP, SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< SEXP >::type obj(objSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type dim(dimSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    __result = Rcpp::wrap(rollmeanimgC(obj, dim, n));
+    return __result;
+END_RCPP
+}
+// rollmedianimgC
+NumericVector rollmedianimgC(SEXP obj, IntegerVector dim, int n);
+RcppExport SEXP dipr_rollmedianimgC(SEXP objSEXP, SEXP dimSEXP, SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< SEXP >::type obj(objSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type dim(dimSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    __result = Rcpp::wrap(rollmedianimgC(obj, dim, n));
+    return __result;
+END_RCPP
+}
+// sfeaturesC
+SEXP sfeaturesC(SEXP obj, SEXP ref, int nx, int ny, int nz);
+RcppExport SEXP dipr_sfeaturesC(SEXP objSEXP, SEXP refSEXP, SEXP nxSEXP, SEXP nySEXP, SEXP nzSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< SEXP >::type obj(objSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type ref(refSEXP);
+    Rcpp::traits::input_parameter< int >::type nx(nxSEXP);
+    Rcpp::traits::input_parameter< int >::type ny(nySEXP);
+    Rcpp::traits::input_parameter< int >::type nz(nzSEXP);
+    __result = Rcpp::wrap(sfeaturesC(obj, ref, nx, ny, nz));
+    return __result;
+END_RCPP
+}
 // sweepC
 NumericVector sweepC(SEXP obj, SEXP m, IntegerVector dim, int op);
 RcppExport SEXP dipr_sweepC(SEXP objSEXP, SEXP mSEXP, SEXP dimSEXP, SEXP opSEXP) {

@@ -18,7 +18,6 @@ NULL
 #' readAVI()
 
 readAVI <- function(filepath, start=1, end=0, skip=0, getFrames=F, crop=c(0,0,0,0), silent=F){
-  require(RImageBook)
   offsetindex <- c()
   nindex <- c()
   indexsize <- c()
