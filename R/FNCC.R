@@ -1,25 +1,25 @@
-#' An FNCC Function
+#' Template matching
 #'
 #' These functions perform template matching using SAD (Sum of absolute differences), NCC (Normalized cross correlation), or FNCC (fast normalized cross correlation).
-#'
-#' @param a A target image of Image object or an array.
-#' @param b A template image of Image object or an array.
-#' @keywords Template matching
+#' @param trg A target image of Image object or an array.
+#' @param tmp A template image of Image object or an array.
+#' @aliases SAD NCC
 #' @return Returns a grayscale image.
 #' @export
 #' @examples
-#' demo(TemplateMatchingDemo)
+#' FNCC()
 
-FNCC <- function(a,b){
-  a <- a - sum(a)/length(a)
-  b <- b - sum(b)/length(b)
-  w <- ncol(a) + ncol(b) - 1
-  h <- nrow(a) + nrow(b) - 1
+FNCC <- function(trg,tmp){
+  trg <- trg - sum(trg)/length(trg)
+  tmp <- tmp - sum(tmp)/length(tmp)
+  w <- ncol(trg) + ncol(tmp) - 1
+  h <- nrow(trg) + nrow(tmp) - 1
   amat <- matrix(0, nrow=h, ncol=w)
   bmat <- matrix(0, nrow=h, ncol=w)
-  amat[1:nrow(a), 1:ncol(a)] <- a
-  bmat[1:nrow(b), 1:ncol(b)] <- b
+  amat[1:nrow(trg), 1:ncol(trg)] <- trg
+  bmat[1:nrow(tmp), 1:ncol(tmp)] <- tmp
   fa <- .fft2d(amat)
   fb <- .fft2d(bmat, TRUE)
   abs(.fft2d(fa*fb, TRUE))/(h*w)
 }
+

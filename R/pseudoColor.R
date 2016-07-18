@@ -1,4 +1,4 @@
-pseudoColor3 <- function (x, min = 0, max = 255) 
+pseudoColor <- function (x, min = 0, max = 255) 
 {
   x <- x * 255 + 1
   up <- seq(0, 255, by = round(256 * 4/(max - min + 1)))
