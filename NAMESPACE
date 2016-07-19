@@ -3,6 +3,7 @@
 export(FNCC)
 export(NCC)
 export(SAD)
+export(pseudoColor)
 export(readAVI)
 export(readFMF)
 export(rollmeanimg)
