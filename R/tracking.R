@@ -1,7 +1,4 @@
-tracking3 <- function (rdir, mask = NULL, w = 0, h = 0, maxdist = 20, bin = 3, interval = 0.1, unit = 1, size = NULL, ftrs = NULL) {
-  require(RImageBook)
-  require(Rcpp)
-  
+tracking <- function (rdir, mask = NULL, w = 0, h = 0, maxdist = 20, bin = 3, interval = 0.1, unit = 1, size = NULL, ftrs = NULL) {
   if (is.null(ftrs) & is.null(mask)) stop("Either a mask or ftrs need to be provided.")
   
   if (is.null(ftrs)){
