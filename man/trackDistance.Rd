@@ -8,15 +8,9 @@
 \alias{tracking}
 \title{Template matching}
 \usage{
-trackDistance(xy, unit = 1)
-
 trackSpeed(dist, bin = 5, interval = 1)
 }
 \arguments{
-\item{xy}{A matrix of object coordinates.}
-
-\item{unit}{Unit length.}
-
 \item{dist}{Traveled distance (e.g. the output of trackDistance).}
 
 \item{bin}{Window size for averaging.}
@@ -27,20 +21,21 @@ trackSpeed(dist, bin = 5, interval = 1)
 
 \item{maxdist}{Maximum distance for object association.}
 
+\item{unit}{Unit length.}
+
 \item{size}{Maximum size difference for objects association.}
+
+\item{xy}{A matrix of object coordinates.}
 
 \item{xy}{A target image of Image object or an array.}
 }
 \value{
-Returns a grayscale image.
-
 Returns a grayscale image.
 }
 \description{
 These functions are for tracking and analyzing objects in movies. tracking calculates various values related to object motion. trackDistance calculates distance traveled by objects during the specified time window. trackSpeed calculates average speed of objects during the specified time window. angularVelocity calculates angular velocity of moving objects. msd calculates mean square diviation of object trajectories.
 }
 \examples{
-tracking()
 tracking()
 }
 
