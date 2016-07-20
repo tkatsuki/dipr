@@ -1,6 +1,7 @@
 #' Object tracking
 #'
 #' These functions are for tracking and analyzing objects in movies. tracking calculates various values related to object motion. trackDistance calculates distance traveled by objects during the specified time window. trackSpeed calculates average speed of objects during the specified time window. angularVelocity calculates angular velocity of moving objects. msd calculates mean square diviation of object trajectories.
+#' @name tracking
 #' @param mask	Labeled binary movie.
 #' @param maxdist	Maximum distance for object association.
 #' @param bin Window size for averaging.
