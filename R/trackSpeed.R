@@ -1,3 +1,8 @@
+#' @rdname tracking
+#' @export
+#' @examples
+#' trackSpeed()
+
 trackSpeed <- function(dist, bin=5, interval=1){
   v <- c()
   for (i in 1:(length(dist)-bin)){

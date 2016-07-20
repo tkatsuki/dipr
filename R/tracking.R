@@ -1,11 +1,28 @@
+#' Object tracking
+#'
+#' These functions are for tracking and analyzing objects in movies. tracking calculates various values related to object motion. trackDistance calculates distance traveled by objects during the specified time window. trackSpeed calculates average speed of objects during the specified time window. angularVelocity calculates angular velocity of moving objects. msd calculates mean square diviation of object trajectories.
+#' @param mask	Labeled binary movie.
+#' @param maxdist	Maximum distance for object association.
+#' @param bin Window size for averaging.
+#' @param interval Time intervals.
+#' @param unit Unit length.
+#' @param size Maximum size difference for objects association.
+#' @param xy A matrix of object coordinates.
+#' @param dist Traveled distance (e.g. the output of trackDistance).
+#' @param xy A target image of Image object or an array.
+#' @aliases trackDistance trackSpeed angularVelocity msd
+#' @export
+#' @examples
+#' tracking()
+
 tracking <- function (rdir, mask = NULL, w = 0, h = 0, maxdist = 20, bin = 3, interval = 0.1, unit = 1, size = NULL, ftrs = NULL) {
   if (is.null(ftrs) & is.null(mask)) stop("Either a mask or ftrs need to be provided.")
-  
+
   if (is.null(ftrs)){
     nf <- dim(mask)[3]
     w <- dim(mask)[1]
     h <- dim(mask)[2]
-    ftrs <- sfeatures(rdir, mask) 
+    ftrs <- sfeatures(rdir, mask)
     rm(mask)
   } else if(is.null(mask)){
     if(w == 0 | h ==0) stop("Provide image size information")
@@ -16,16 +33,16 @@ tracking <- function (rdir, mask = NULL, w = 0, h = 0, maxdist = 20, bin = 3, in
     h <- dim(mask)[2]
     rm(mask)
   }
-  
+
   # Identify frames with objects
   objfr <- which(sapply(ftrs, length) != 0)
-  
+
   ftrs[[objfr[1]]] <- cbind(ftrs[[objfr[1]]], Index = 1:nrow(ftrs[[objfr[1]]]), Frame = objfr[1])
   maxid <- 1
 
   if (is.null(size) == T) {
     for (i in 1:(length(objfr)-1)) {
-      distance <- distmat(ftrs[[objfr[i]]][, "m.x"], ftrs[[objfr[i]]][,"m.y"], 
+      distance <- distmat(ftrs[[objfr[i]]][, "m.x"], ftrs[[objfr[i]]][,"m.y"],
                           ftrs[[objfr[i + 1]]][, "m.x"], ftrs[[objfr[i + 1]]][,"m.y"])
       if(maxid < max(ftrs[[objfr[i]]][, "Index"])) maxid <- max(ftrs[[objfr[i]]][, "Index"])
       ftrs[[objfr[i + 1]]] <- cbind(ftrs[[objfr[i + 1]]], Index = (maxid + 1):(maxid + nrow(ftrs[[objfr[i + 1]]])))
@@ -35,12 +52,12 @@ tracking <- function (rdir, mask = NULL, w = 0, h = 0, maxdist = 20, bin = 3, in
     }
   } else {
     for (i in 1:(length(objfr)-1)) {
-      distance <- distmat(ftrs[[objfr[i]]][, "m.x"], ftrs[[objfr[i]]][,"m.y"], 
+      distance <- distmat(ftrs[[objfr[i]]][, "m.x"], ftrs[[objfr[i]]][,"m.y"],
                           ftrs[[objfr[i + 1]]][, "m.x"], ftrs[[objfr[i + 1]]][,"m.y"])
       sizediff <- outer(ftrs[[objfr[i]]][, "m.pxs"], ftrs[[objfr[i + 1]]][, "m.pxs"], "-")
       if(maxid < max(ftrs[[objfr[i]]][, "Index"])) maxid <- max(ftrs[[objfr[i]]][, "Index"])
       ftrs[[objfr[i + 1]]] <- cbind(ftrs[[objfr[i + 1]]], Index = (maxid + 1):(maxid + nrow(ftrs[[objfr[i + 1]]])))
-      nindex <- which(distance == apply(distance, 1, min) & 
+      nindex <- which(distance == apply(distance, 1, min) &
                         distance < maxdist & abs(sizediff) < size, arr.ind = TRUE)
       ftrs[[objfr[i + 1]]][nindex[, "col"], "Index"] <- ftrs[[objfr[i]]][nindex[,"row"], "Index"]
       ftrs[[objfr[i + 1]]] <- cbind(ftrs[[objfr[i + 1]]], Frame = objfr[i + 1])
@@ -63,11 +80,11 @@ tracking <- function (rdir, mask = NULL, w = 0, h = 0, maxdist = 20, bin = 3, in
   smat[ids] <- xy[, 5]
   fmat <- matrix(NA, nf, max(ida))
   fmat[ids] <- xy[, 1]
-  xy <- cbind(rep(unique(ida), each = nf), as.vector(xmat), 
+  xy <- cbind(rep(unique(ida), each = nf), as.vector(xmat),
               as.vector(ymat), as.vector(smat), as.vector(fmat))
   png(filename = "trackResult.png", width = w, height = h, bg = "black")
   par(plt = c(0, 1, 0, 1), xaxs = "i", yaxs = "i")
-  matplot(xmat, ymat, type = "l", lty = 1, col = rainbow(16), 
+  matplot(xmat, ymat, type = "l", lty = 1, col = rainbow(16),
           axes = F, xlim = c(0, w), ylim = c(0, h))
   dev.off()
   resultplot <- readImage("trackResult.png")
