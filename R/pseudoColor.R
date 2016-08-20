@@ -35,5 +35,5 @@ pseudoColor <- function (x, min = 0, max = 255)
                rep(0, (max - min - length(down) - 1 - quat)), rep(0, 255 - max))
     x.b <- matrix(lut.b[x], nrow(x), ncol(x))
   }
-  x.rgb <- rgbImage(x.r/255, x.g/255, x.b/255)
+  x.rgb <- EBImage::rgbImage(x.r/255, x.g/255, x.b/255)
 }
