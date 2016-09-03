@@ -115,7 +115,7 @@ readTIFF <- function(filename, start=1, end=0, skip=0, crop=c(0,0,0,0), frames=N
       outputimg <- matrix(as.integer(paste("0x", even_col, odd_col, sep="")), w, h)
     }else{
       for (j in 1:nf) {
-        tmpdata[(2*w*h*(j-1)):(2*w*h*j)] <- ByteGenerator(1, fr[j], bitspersample)
+        tmpdata[(2*w*h*(j-1)+1):(2*w*h*j)] <- ByteGenerator(1, fr[j], bitspersample)
       }
       odd_col <- tmpdata[seq(1,2*w*h,2)]
       even_col <- tmpdata[seq(2,2*w*h,2)]
