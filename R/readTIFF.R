@@ -82,21 +82,6 @@ readTIFF <- function(filename, start=1, end=0, skip=0, crop=c(0,0,0,0), frames=N
     bitspersample <- raw2int(rev(raw[(bpsoffset+1):(bpsoffset+2)]))
   }
 
-  # Generate byte data
-  if(nch==1){
-    if(nf==1){
-      outputimg <- array(0, dim=c(w, h))
-    }else{
-      outputimg <- array(0, dim=c(w, h, nf))
-    }
-  }else{
-    if(nf==1){
-      outputimg <- array(0, dim=c(w, h, nch))
-    }else{
-      outputimg <- array(0, dim=c(w, h, nch, nf))
-    }
-  }
-
   ByteGenerator <- function(i, j, bitspersample){
 
     # pixel data start point
@@ -109,26 +94,32 @@ readTIFF <- function(filename, start=1, end=0, skip=0, crop=c(0,0,0,0), frames=N
 
     # Collect image data
     if(bitspersample==8){
-      imagesize <- w*h
-      imagedata <- raw[px.start:(px.start-1+imagesize)]
+      imagedata <- raw[px.start:(px.start-1+w*h)]
       matrix(as.numeric(imagedata), w, h)
     }
     if(bitspersample==16){
-      imagesize <- w*h
-      imagedata <- raw[px.start:(px.start-1+imagesize*2)]
-      odd_col <- imagedata[seq(1,imagesize*2,2)]
-      even_col <- imagedata[seq(2,imagesize*2,2)]
-      matrix(as.integer(paste("0x", even_col, odd_col, sep="")), w, h)
+      imagedata <- raw[px.start:(px.start-1+w*h*2)]
+      imagedata
     }
   }
 
+  # Prepare a raw vector
+  tmpdata <- raw(w*h*nch*nf*2)
+
+  # Store image in the array
   if(nch==1){
     if(nf==1){
-      outputimg <- ByteGenerator(1, 1, bitspersample)
+      tmpdata[1:(2*w*h)] <- ByteGenerator(1, 1, bitspersample)
+      odd_col <- tmpdata[seq(1,2*w*h,2)]
+      even_col <- tmpdata[seq(2,2*w*h,2)]
+      outputimg <- matrix(as.integer(paste("0x", even_col, odd_col, sep="")), w, h)
     }else{
       for (j in 1:nf) {
-        outputimg[,,j] <- ByteGenerator(1, fr[j], bitspersample)
+        tmpdata[(2*w*h*(j-1)):(2*w*h*j)] <- ByteGenerator(1, fr[j], bitspersample)
       }
+      odd_col <- tmpdata[seq(1,2*w*h,2)]
+      even_col <- tmpdata[seq(2,2*w*h,2)]
+      outputimg <- array(as.integer(paste("0x", even_col, odd_col, sep="")), dim=c(w, h, nf))
     }
   }else{
     if(nf==1){
