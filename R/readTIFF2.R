@@ -25,15 +25,15 @@ readTIFF2 <- function(filename, start=1, end=0, crop=c(0,0,0,0), frames=NULL, ge
   init_raw <- readBin(con, "raw", 8)
 
   # Check header
-  if(raw2int(rev(init_raw[0x3:0x4]))!=42) stop("This file is not TIFF.")
+  if(raw2num(rev(init_raw[0x3:0x4]))!=42) stop("This file is not TIFF.")
 
   # A function that returns integer value of a directory entry
   value <- function(tag1, tag2, IFD){
-    tag <- raw2int(c(tag2, tag1))
-    len <- raw2int(rev(IFD[1:2]))
+    tag <- raw2num(c(tag2, tag1))
+    len <- raw2num(rev(IFD[1:2]))
     IFDmat <- matrix(IFD[3:(2+12*len)], ncol=12, byrow=T)
-    tags <- apply(IFDmat[,2:1], 1, raw2int)
-    val <- raw2int(rev(IFDmat[which(tags==tag),9:12]))
+    tags <- apply(IFDmat[,2:1], 1, raw2num)
+    val <- raw2num(rev(IFDmat[which(tags==tag),9:12]))
     val
   }
 
@@ -43,13 +43,13 @@ readTIFF2 <- function(filename, start=1, end=0, crop=c(0,0,0,0), frames=NULL, ge
       seek(con, where = offset, origin="start")
       imageinfosize <-  readBin(con, "raw", 2)
       seek(con, where = offset, origin="start")
-      tmpinfo <- readBin(con, "raw", (12*raw2int(rev(imageinfosize))+2+4))
+      tmpinfo <- readBin(con, "raw", (12*raw2num(rev(imageinfosize))+2+4))
       imageinfo <- append(imageinfo, list(tmpinfo))
-      offset <- raw2int(rev(tail(tmpinfo, 4)))
+      offset <- raw2num(rev(tail(tmpinfo, 4)))
     }
     return(imageinfo)
   }
-  imagetags <- info(raw2int(rev(init_raw[0x5:0x8])), 1, imagetags)
+  imagetags <- info(raw2num(rev(init_raw[0x5:0x8])), 1, imagetags)
 
   # Check compression
   if(value("03", "01", imagetags[[1]]) == 5) stop("Only uncompressed images can be read.")
@@ -84,7 +84,7 @@ readTIFF2 <- function(filename, start=1, end=0, crop=c(0,0,0,0), frames=NULL, ge
   }else{
     bpsoffset <- value("02", "01", imagetags[[1]])
     seek(con, where=bpsoffset, origin="start")
-    bitspersample <- raw2int(rev(readBin(con, "raw", 2)))
+    bitspersample <- raw2num(rev(readBin(con, "raw", 2)))
   }
   print(paste0(bitspersample, " bit image."))
 
@@ -94,7 +94,7 @@ readTIFF2 <- function(filename, start=1, end=0, crop=c(0,0,0,0), frames=NULL, ge
       px.start <- value("11", "01", imagetags[[j]])
     }else{
       seek(con, where=(value("11", "01", imagetags[[j]])+(i-1)*4), origin="start")
-      px.start <- raw2int(rev(readBin(con, "raw", 4)))
+      px.start <- raw2num(rev(readBin(con, "raw", 4)))
     }
 
     # Collect image data
