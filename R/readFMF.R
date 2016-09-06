@@ -49,11 +49,11 @@ readFMF <- function(filepath, start=1, end=0, skip=0, crop=c(0,0,0,0), frames=NU
           imgdata[(framesize*(i-1)+1):(framesize*i)]<- imgrawdata[9:bytes_per_chunk]
         } else {
           seek(con, where = (frames[i]-frames[i-1]-1)*bytes_per_chunk, origin="current")
-          imgrawdata <- readBin(con, "integer", n=bytes_per_chunk)
+          imgrawdata <- readBin(con, "integer", n=bytes_per_chunk, size=1, signed=F)
           imgdata[(framesize*(i-1)+1):(framesize*i)]<- imgrawdata[9:bytes_per_chunk]
         }
       } else{
-        imgrawdata <- readBin(con, "integer", n=bytes_per_chunk)
+        imgrawdata <- readBin(con, "integer", n=bytes_per_chunk, size=1, signed=F)
         imgdata[(framesize*(i-1)+1):(framesize*i)]<- imgrawdata[9:bytes_per_chunk]
       }
     }
@@ -73,7 +73,7 @@ readFMF <- function(filepath, start=1, end=0, skip=0, crop=c(0,0,0,0), frames=NU
         cropsize <- c(x2-x1+1)*c(y2-y1+1)
         imgdata <- rep(0, cropsize*nframes)
         for(j in 1:nframes){
-          imgrawdata <- readBin(con, "integer", n=bytes_per_chunk)
+          imgrawdata <- readBin(con, "integer", n=bytes_per_chunk, size=1, signed=F)
           tmpmat <- matrix(imgrawdata[9:bytes_per_chunk], ncol=f_width)
           imgdata[(cropsize*(j-1)+1):(cropsize*j)] <-  as.vector(tmpmat[x1:x2,y1:y2])
         }
@@ -82,7 +82,7 @@ readFMF <- function(filepath, start=1, end=0, skip=0, crop=c(0,0,0,0), frames=NU
       } else {
         w <- f_width
         h <- f_height
-        imgrawdata <- readBin(con, "integer", n=(endpos-startpos+1))
+        imgrawdata <- readBin(con, "integer", n=(endpos-startpos+1), size=1, signed=F)
         close(con)
         imgdata <- rep(0, framesize*nframes)
         for(i in 1:nframes){
@@ -96,7 +96,7 @@ readFMF <- function(filepath, start=1, end=0, skip=0, crop=c(0,0,0,0), frames=NU
       nframes <- length(seq(1, nframes, skip+1))
       imgdata <- rep(0, framesize*nframes)
       for(i in 1:nframes){
-        imgrawdata <- readBin(con, "integer", n=bytes_per_chunk)
+        imgrawdata <- readBin(con, "integer", n=bytes_per_chunk, size=1, signed=F)
         imgdata[(framesize*(i-1)+1):(framesize*i)]<- imgrawdata[9:bytes_per_chunk]
         seek(con, where = skip*bytes_per_chunk, origin="current")
       }
