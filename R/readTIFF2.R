@@ -5,9 +5,10 @@
 #' @param filepath A caracter string of the path to the file. Required.
 #' @param start An integer of the start frame. Default = 1.
 #' @param end An integer of the end frame. Default = 0 (last frame of the file).
+#' @param frames A vector specifying which frames to be loaded.
 #' @param getFrames Return number of frames. Default = False.
-#' @param crop An integer vector depicting the xy coordinate of the top-left corner and the bottom-right corner you want to crop.
-#' @param silent Whether or not show message. Default = False.
+#' @param crop Not implemented yet.
+#' @param intensity Whether or not return mean intensity of each frame. Default = False.
 #' @keywords tiff
 #' @export
 #' @examples
@@ -102,7 +103,7 @@ readTIFF2 <- function(filename, start=1, end=0, crop=c(0,0,0,0), frames=NULL, ge
       imagedata <- readBin(con, what="integer", n=w*h, size=1, signed=F)
       if(intensity==T)
       {
-        sum(imagedata)
+        mean(imagedata)
       } else{
         imagedata
       }
@@ -112,7 +113,7 @@ readTIFF2 <- function(filename, start=1, end=0, crop=c(0,0,0,0), frames=NULL, ge
       imagedata <- readBin(con, "integer", n=w*h, size=2, signed=F)
       if(intensity==T)
       {
-        sum(imagedata)
+        mean(imagedata)
       } else{
         imagedata
       }
@@ -121,15 +122,15 @@ readTIFF2 <- function(filename, start=1, end=0, crop=c(0,0,0,0), frames=NULL, ge
 
   # Prepare a raw vector
   tmpdata <- rep(0, w*h*nf*nch)
-  intensity_sum <- rep(0, nf)
+  intensity_mean <- rep(0, nf)
 
   # Store image in the array
   if(nch==1){
     if(nf==1){
       if(intensity==T){
-        intensity_sum <- ByteGenerator(1, 1, bitspersample, intensity=T)
+        intensity_mean <- ByteGenerator(1, 1, bitspersample, intensity=T)
         close(con)
-        return(intensity_sum)
+        return(intensity_mean)
       }else{
         tmpdata[1:(2*w*h)] <- ByteGenerator(1, 1, bitspersample)
         outputimg <- array(tmpdata, dim=c(w,h))
@@ -139,10 +140,10 @@ readTIFF2 <- function(filename, start=1, end=0, crop=c(0,0,0,0), frames=NULL, ge
     }else{
       if(intensity==T){
         for (j in 1:nf) {
-          intensity_sum[j] <- ByteGenerator(1, fr[j], bitspersample, intensity=T)
+          intensity_mean[j] <- ByteGenerator(1, fr[j], bitspersample, intensity=T)
         }
         close(con)
-        return(intensity_sum)
+        return(intensity_mean)
       }else{
         for (j in 1:nf) {
           tmpdata[((j-1)*w*h+1):(j*w*h)] <- ByteGenerator(1, fr[j], bitspersample)
@@ -156,9 +157,9 @@ readTIFF2 <- function(filename, start=1, end=0, crop=c(0,0,0,0), frames=NULL, ge
     if(nf==1){
       if(intensity==T){
         for(i in 1:nch){
-          intensity_sum[i] <- ByteGenerator(i, 1, bitspersample, intensity=T)
+          intensity_mean[i] <- ByteGenerator(i, 1, bitspersample, intensity=T)
           close(con)
-          return(intensity_sum)
+          return(intensity_mean)
         }
       }else{
         for(i in 1:nch){

@@ -12,13 +12,15 @@ readTIFF2(filename, start = 1, end = 0, crop = c(0, 0, 0, 0),
 
 \item{end}{An integer of the end frame. Default = 0 (last frame of the file).}
 
-\item{crop}{An integer vector depicting the xy coordinate of the top-left corner and the bottom-right corner you want to crop.}
+\item{crop}{Not implemented yet.}
+
+\item{frames}{A vector specifying which frames to be loaded.}
 
 \item{getFrames}{Return number of frames. Default = False.}
 
-\item{filepath}{A caracter string of the path to the file. Required.}
+\item{intensity}{Whether or not return mean intensity of each frame. Default = False.}
 
-\item{silent}{Whether or not show message. Default = False.}
+\item{filepath}{A caracter string of the path to the file. Required.}
 }
 \description{
 This function allows you to load a TIFF file.
