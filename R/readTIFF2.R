@@ -20,7 +20,7 @@ readTIFF2 <- function(filename, start=1, end=0, crop=c(0,0,0,0), frames=NULL, ge
 
   imagetags <- data.frame()
 
-  # Open a lsm file and close it
+  # Open a tiff file
   con <- file(filename, open="rb")
   init_raw <- readBin(con, "raw", 8)
 
@@ -128,11 +128,11 @@ readTIFF2 <- function(filename, start=1, end=0, crop=c(0,0,0,0), frames=NULL, ge
   if(nch==1){
     if(nf==1){
       if(intensity==T){
-        intensity_mean <- ByteGenerator(1, 1, bitspersample, intensity=T)
+        intensity_mean <- ByteGenerator(1, fr, bitspersample, intensity=T)
         close(con)
         return(intensity_mean)
       }else{
-        tmpdata[1:(2*w*h)] <- ByteGenerator(1, 1, bitspersample)
+        tmpdata[1:(2*w*h)] <- ByteGenerator(1, fr, bitspersample)
         outputimg <- array(tmpdata, dim=c(w,h))
         close(con)
         return(outputimg)
