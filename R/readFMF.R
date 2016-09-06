@@ -42,25 +42,25 @@ readFMF <- function(filepath, start=1, end=0, skip=0, crop=c(0,0,0,0), frames=NU
   seek(con, where = startpos - 1)
 
   if(is.null(frames)==F){
-    imgdata <- rep(0, framesize*nframes)
+    imgdata <- raw(framesize*nframes)
     for(i in 1:length(frames)){
       if(i > 1){
         if(frames[i]==frames[i-1]){
           imgdata[(framesize*(i-1)+1):(framesize*i)]<- imgrawdata[9:bytes_per_chunk]
         } else {
           seek(con, where = (frames[i]-frames[i-1]-1)*bytes_per_chunk, origin="current")
-          imgrawdata <- readBin(con, "integer", n=bytes_per_chunk, size=1, signed=F)
+          imgrawdata <- readBin(con, "raw", bytes_per_chunk)
           imgdata[(framesize*(i-1)+1):(framesize*i)]<- imgrawdata[9:bytes_per_chunk]
         }
       } else{
-        imgrawdata <- readBin(con, "integer", n=bytes_per_chunk, size=1, signed=F)
+        imgrawdata <- readBin(con, "raw", bytes_per_chunk)
         imgdata[(framesize*(i-1)+1):(framesize*i)]<- imgrawdata[9:bytes_per_chunk]
       }
     }
     close(con)
     print(paste("Read specified frames of ", nframes, " frames", sep=""))
     rm(imgrawdata)
-    array(imgdata, dim=c(f_width, f_height, nframes))
+    array(as.integer(imgdata), dim=c(f_width, f_height, nframes))
   } else {
     if(skip==0){
       if(all.equal(crop, c(0,0,0,0))!=T){
@@ -71,9 +71,9 @@ readFMF <- function(filepath, start=1, end=0, skip=0, crop=c(0,0,0,0), frames=NU
         w <- x2-x1+1
         h <- y2-y1+1
         cropsize <- c(x2-x1+1)*c(y2-y1+1)
-        imgdata <- rep(0, cropsize*nframes)
+        imgdata <- raw(cropsize*nframes)
         for(j in 1:nframes){
-          imgrawdata <- readBin(con, "integer", n=bytes_per_chunk, size=1, signed=F)
+          imgrawdata <- readBin(con, "raw", bytes_per_chunk)
           tmpmat <- matrix(imgrawdata[9:bytes_per_chunk], ncol=f_width)
           imgdata[(cropsize*(j-1)+1):(cropsize*j)] <-  as.vector(tmpmat[x1:x2,y1:y2])
         }
@@ -82,28 +82,28 @@ readFMF <- function(filepath, start=1, end=0, skip=0, crop=c(0,0,0,0), frames=NU
       } else {
         w <- f_width
         h <- f_height
-        imgrawdata <- readBin(con, "integer", n=(endpos-startpos+1), size=1, signed=F)
+        imgrawdata <- readBin(con, "raw", endpos-startpos+1)
         close(con)
-        imgdata <- rep(0, framesize*nframes)
+        imgdata <- raw(framesize*nframes)
         for(i in 1:nframes){
           imgdata[(framesize*(i-1)+1):(framesize*i)]<- imgrawdata[((i-1)*bytes_per_chunk + 9):(i*bytes_per_chunk)]
         }
         print(paste("Read ", start, "-", end, " of ", max_n_frames, " frames", sep=""))
         rm(imgrawdata)
       }
-      array(imgdata, dim=c(w, h, nframes))
+      array(as.integer(imgdata), dim=c(w, h, nframes))
     } else{
       nframes <- length(seq(1, nframes, skip+1))
-      imgdata <- rep(0, framesize*nframes)
+      imgdata <- raw(framesize*nframes)
       for(i in 1:nframes){
-        imgrawdata <- readBin(con, "integer", n=bytes_per_chunk, size=1, signed=F)
+        imgrawdata <- readBin(con, "raw", bytes_per_chunk)
         imgdata[(framesize*(i-1)+1):(framesize*i)]<- imgrawdata[9:bytes_per_chunk]
         seek(con, where = skip*bytes_per_chunk, origin="current")
       }
       close(con)
       print(paste("Read ", start, "-", end, " of ", max_n_frames, " frames skipping every ", skip, " frames", sep=""))
       rm(imgrawdata)
-      array(imgdata, dim=c(f_width, f_height, nframes))
+      array(as.integer(imgdata), dim=c(f_width, f_height, nframes))
     }
   }
 }
