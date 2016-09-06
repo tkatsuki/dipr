@@ -1,20 +1,22 @@
-#' A readTIFF Function
+#' A readTIFF2 Function
 #'
-#' This function allows you to load a grayscale TIFF file.
+#' This function allows you to load a TIFF file.
 #'
 #' @param filepath A caracter string of the path to the file. Required.
 #' @param start An integer of the start frame. Default = 1.
 #' @param end An integer of the end frame. Default = 0 (last frame of the file).
-#' @param skip An integer of skip frame. Default = 0 (read every frame).
 #' @param getFrames Return number of frames. Default = False.
 #' @param crop An integer vector depicting the xy coordinate of the top-left corner and the bottom-right corner you want to crop.
 #' @param silent Whether or not show message. Default = False.
 #' @keywords tiff
 #' @export
 #' @examples
-#' readTIFF()
+#' readTIFF2()
 
-readTIFF <- function(filename, start=1, end=0, skip=0, crop=c(0,0,0,0), frames=NULL, getFrames=F) {
+readTIFF2 <- function(filename, start=1, end=0, crop=c(0,0,0,0), frames=NULL, getFrames=F, intensity=F) {
+  ## TO DO
+  ## Implement cropping
+
   imagetags <- data.frame()
 
   # Open a lsm file and close it
@@ -85,7 +87,7 @@ readTIFF <- function(filename, start=1, end=0, skip=0, crop=c(0,0,0,0), frames=N
   }
   print(paste0(bitspersample, " bit image."))
 
-  ByteGenerator <- function(i, j, bitspersample){
+  ByteGenerator <- function(i, j, bitspersample, intensity=F){
     # pixel data start point
     if(nch==1){
       px.start <- value("11", "01", imagetags[[j]])
@@ -97,47 +99,79 @@ readTIFF <- function(filename, start=1, end=0, skip=0, crop=c(0,0,0,0), frames=N
     # Collect image data
     if(bitspersample==8){
       seek(con, where=px.start, origin="start")
-      imagedata <- readBin(con, "raw", w*h)
-      matrix(as.numeric(imagedata), w, h)
+      imagedata <- readBin(con, what="integer", n=w*h, size=1, signed=F)
+      if(intensity==T)
+      {
+        sum(imagedata)
+      } else{
+        imagedata
+      }
     }
     if(bitspersample==16){
       seek(con, where=px.start, origin="start")
-      imagedata <- readBin(con, "raw", 2*w*h)
-      imagedata
+      imagedata <- readBin(con, "integer", n=w*h, size=2, signed=F)
+      if(intensity==T)
+      {
+        sum(imagedata)
+      } else{
+        imagedata
+      }
     }
   }
 
   # Prepare a raw vector
-  tmpdata <- raw(w*h*nch*nf*2)
+  tmpdata <- rep(0, w*h*nf*nch)
+  intensity_sum <- rep(0, nf)
 
   # Store image in the array
   if(nch==1){
     if(nf==1){
-      tmpdata[1:(2*w*h)] <- ByteGenerator(1, 1, bitspersample)
-      odd_col <- tmpdata[seq(1,2*w*h,2)]
-      even_col <- tmpdata[seq(2,2*w*h,2)]
-      outputimg <- matrix(as.integer(paste("0x", even_col, odd_col, sep="")), w, h)
-    }else{
-      for (j in 1:nf) {
-        tmpdata[(2*w*h*(j-1)+1):(2*w*h*j)] <- ByteGenerator(1, fr[j], bitspersample)
+      if(intensity==T){
+        intensity_sum <- ByteGenerator(1, 1, bitspersample, intensity=T)
+        close(con)
+        return(intensity_sum)
+      }else{
+        tmpdata[1:(2*w*h)] <- ByteGenerator(1, 1, bitspersample)
+        outputimg <- array(tmpdata, dim=c(w,h))
+        close(con)
+        return(outputimg)
       }
-      odd_col <- tmpdata[seq(1,2*w*h,2)]
-      even_col <- tmpdata[seq(2,2*w*h,2)]
-      outputimg <- array(as.integer(paste("0x", even_col, odd_col, sep="")), dim=c(w, h, nf))
+    }else{
+      if(intensity==T){
+        for (j in 1:nf) {
+          intensity_sum[j] <- ByteGenerator(1, fr[j], bitspersample, intensity=T)
+        }
+        close(con)
+        return(intensity_sum)
+      }else{
+        for (j in 1:nf) {
+          tmpdata[((j-1)*w*h+1):(j*w*h)] <- ByteGenerator(1, fr[j], bitspersample)
+        }
+        outputimg <- array(tmpdata, dim=c(w,h,nf))
+        close(con)
+        return(outputimg)
+      }
     }
   }else{
     if(nf==1){
-      for(i in 1:nch){
-        outputimg[,,i] <- ByteGenerator(i, 1, bitspersample)
+      if(intensity==T){
+        for(i in 1:nch){
+          intensity_sum[i] <- ByteGenerator(i, 1, bitspersample, intensity=T)
+          close(con)
+          return(intensity_sum)
+        }
+      }else{
+        for(i in 1:nch){
+          tmpdatatmpdata[((i-1)*w*h+1):(i*w*h)] <- ByteGenerator(i, 1, bitspersample)
+        }
+        outputimg <- array(tmpdata, dim=c(w,h,nch))
+        close(con)
+        return(outputimg)
       }
     }else{
-      for (j in 1:nf) for(i in 1:nch){
-        outputimg[,,i,j] <- ByteGenerator(i, fr[j], bitspersample)
-      }
+      close(con)
+      stop("Multiple frames is only supported for grayscale images.")
     }
   }
-  close(con)
-
-  # Return an array
-  outputimg
 }
+

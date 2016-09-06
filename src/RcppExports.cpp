@@ -5,6 +5,17 @@
 
 using namespace Rcpp;
 
+// raw2intC
+IntegerVector raw2intC(CharacterVector vec);
+RcppExport SEXP dipr_raw2intC(SEXP vecSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< CharacterVector >::type vec(vecSEXP);
+    __result = Rcpp::wrap(raw2intC(vec));
+    return __result;
+END_RCPP
+}
 // rollmeanimgC
 NumericVector rollmeanimgC(SEXP obj, IntegerVector dim, int n);
 RcppExport SEXP dipr_rollmeanimgC(SEXP objSEXP, SEXP dimSEXP, SEXP nSEXP) {
