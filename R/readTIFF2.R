@@ -158,9 +158,9 @@ readTIFF2 <- function(filename, start=1, end=0, crop=c(0,0,0,0), frames=NULL, ge
       if(intensity==T){
         for(i in 1:nch){
           intensity_mean[i] <- ByteGenerator(i, 1, bitspersample, intensity=T)
-          close(con)
-          return(intensity_mean)
         }
+        close(con)
+        return(intensity_mean)
       }else{
         for(i in 1:nch){
           tmpdatatmpdata[((i-1)*w*h+1):(i*w*h)] <- ByteGenerator(i, 1, bitspersample)
