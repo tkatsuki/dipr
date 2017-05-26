@@ -33,7 +33,10 @@ readTIFF2 <- function(filename, start=1, end=0, crop=c(0,0,0,0), frames=NULL, ge
     len <- raw2num(rev(IFD[1:2]))
     IFDmat <- matrix(IFD[3:(2+12*len)], ncol=12, byrow=T)
     tags <- apply(IFDmat[,2:1], 1, raw2num)
-    val <- raw2num(rev(IFDmat[which(tags==tag),9:12]))
+    if(length(which(tags==tag))==0) val <- NA
+    else{
+      val <- raw2num(rev(IFDmat[which(tags==tag),9:12]))
+    }
     val
   }
 
@@ -52,7 +55,7 @@ readTIFF2 <- function(filename, start=1, end=0, crop=c(0,0,0,0), frames=NULL, ge
   imagetags <- info(raw2num(rev(init_raw[0x5:0x8])), 1, imagetags)
 
   # Check compression
-  if(value("03", "01", imagetags[[1]]) == 5) stop("Only uncompressed images can be read.")
+  if(is.na(value("03", "01", imagetags[[1]]))==F & value("03", "01", imagetags[[1]]) == 5) stop("Only uncompressed images can be read.")
 
   # Number of frames
   max_n_frames <- length(imagetags)
