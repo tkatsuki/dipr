@@ -1,3 +1,11 @@
+#' Finding peaks
+#'
+#' This function finds peaks in grayscale images.
+#' @param img An image of Image class or a matrix.
+#' @export
+#' @examples
+#' findPeaks()
+
 findPeaks <- function(img) {
   mask <- img > 0
   m1 <- matrix(c(0, 0, 0, -1, 1, 0, 0, 0, 0), 3, 3, byrow=TRUE)
