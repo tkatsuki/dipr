@@ -1,3 +1,5 @@
+#' @export
+
 skeletonize <- function(x){
   s <- matrix(1, nrow(x), ncol(x))
   skel <- matrix(0, nrow(x), ncol(x))

@@ -1,3 +1,5 @@
+#' @export
+#'
 medianPrj <- function(img){
   if(!require(matrixStats)){
   install.packages("matrixStats")

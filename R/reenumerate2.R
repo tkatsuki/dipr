@@ -1,5 +1,7 @@
+#' @export
+
 reenumerate2 <- function (x) {
-  if (any(max(x) < 0)) 
+  if (any(max(x) < 0))
     stop("'x' contains negative values and is incorrectly formed")
   dim <- dim(x)
   x <- apply(x, 3, function(im) {

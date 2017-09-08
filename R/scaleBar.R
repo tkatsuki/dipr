@@ -1,3 +1,5 @@
+#' @export
+
 scaleBar <- function(img, col="white", px=60) {
   w <- nrow(img)
   h <- ncol(img)

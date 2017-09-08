@@ -1,8 +1,10 @@
+#' @export
+
 thinning <- function(x){
   x <- EBI2biOps(x)/255
   l1 <- .lut1()
   l2 <- .lut2()
-  m <- matrix(c(2^7, 2^0, 2^1, 2^6, 0, 2^2, 2^5, 2^4, 2^3), 
+  m <- matrix(c(2^7, 2^0, 2^1, 2^6, 0, 2^2, 2^5, 2^4, 2^3),
               3, 3, byrow=TRUE)
 
   repeat{
