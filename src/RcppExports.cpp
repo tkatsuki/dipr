@@ -7,7 +7,7 @@ using namespace Rcpp;
 
 // raw2intC
 IntegerVector raw2intC(CharacterVector vec);
-RcppExport SEXP dipr_raw2intC(SEXP vecSEXP) {
+RcppExport SEXP _dipr_raw2intC(SEXP vecSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -18,7 +18,7 @@ END_RCPP
 }
 // rollmeanimgC
 NumericVector rollmeanimgC(SEXP obj, IntegerVector dim, int n);
-RcppExport SEXP dipr_rollmeanimgC(SEXP objSEXP, SEXP dimSEXP, SEXP nSEXP) {
+RcppExport SEXP _dipr_rollmeanimgC(SEXP objSEXP, SEXP dimSEXP, SEXP nSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -31,7 +31,7 @@ END_RCPP
 }
 // rollmedianimgC
 NumericVector rollmedianimgC(SEXP obj, IntegerVector dim, int n);
-RcppExport SEXP dipr_rollmedianimgC(SEXP objSEXP, SEXP dimSEXP, SEXP nSEXP) {
+RcppExport SEXP _dipr_rollmedianimgC(SEXP objSEXP, SEXP dimSEXP, SEXP nSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -44,7 +44,7 @@ END_RCPP
 }
 // sfeaturesC
 SEXP sfeaturesC(SEXP obj, SEXP ref, int nx, int ny, int nz);
-RcppExport SEXP dipr_sfeaturesC(SEXP objSEXP, SEXP refSEXP, SEXP nxSEXP, SEXP nySEXP, SEXP nzSEXP) {
+RcppExport SEXP _dipr_sfeaturesC(SEXP objSEXP, SEXP refSEXP, SEXP nxSEXP, SEXP nySEXP, SEXP nzSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -59,7 +59,7 @@ END_RCPP
 }
 // sweepC
 NumericVector sweepC(SEXP obj, SEXP m, IntegerVector dim, int op);
-RcppExport SEXP dipr_sweepC(SEXP objSEXP, SEXP mSEXP, SEXP dimSEXP, SEXP opSEXP) {
+RcppExport SEXP _dipr_sweepC(SEXP objSEXP, SEXP mSEXP, SEXP dimSEXP, SEXP opSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -70,4 +70,18 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(sweepC(obj, m, dim, op));
     return rcpp_result_gen;
 END_RCPP
+}
+
+static const R_CallMethodDef CallEntries[] = {
+    {"_dipr_raw2intC", (DL_FUNC) &_dipr_raw2intC, 1},
+    {"_dipr_rollmeanimgC", (DL_FUNC) &_dipr_rollmeanimgC, 3},
+    {"_dipr_rollmedianimgC", (DL_FUNC) &_dipr_rollmedianimgC, 3},
+    {"_dipr_sfeaturesC", (DL_FUNC) &_dipr_sfeaturesC, 5},
+    {"_dipr_sweepC", (DL_FUNC) &_dipr_sweepC, 4},
+    {NULL, NULL, 0}
+};
+
+RcppExport void R_init_dipr(DllInfo *dll) {
+    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
 }
