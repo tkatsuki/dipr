@@ -17,4 +17,5 @@ thinning <- function(x){
     x <- x2
   }
 
+  return(x)
 }
