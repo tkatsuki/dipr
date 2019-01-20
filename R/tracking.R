@@ -16,14 +16,14 @@
 #' @examples
 #' tracking()
 
-tracking <- function (rdir, mask = NULL, w = 0, h = 0, maxdist = 20, bin = 3, interval = 0.1, unit = 1, size = NULL, ftrs = NULL) {
+tracking <- function (mask = NULL, w = 0, h = 0, maxdist = 20, bin = 3, interval = 0.1, unit = 1, size = NULL, ftrs = NULL) {
   if (is.null(ftrs) & is.null(mask)) stop("Either a mask or ftrs need to be provided.")
 
   if (is.null(ftrs)){
     nf <- dim(mask)[3]
     w <- dim(mask)[1]
     h <- dim(mask)[2]
-    ftrs <- sfeatures(rdir, mask)
+    ftrs <- sfeatures(mask)
     rm(mask)
   } else if(is.null(mask)){
     if(w == 0 | h ==0) stop("Provide image size information")

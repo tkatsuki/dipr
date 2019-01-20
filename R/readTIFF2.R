@@ -132,12 +132,12 @@ readTIFF2 <- function(filename, start=1, end=0, crop=c(0,0,0,0), frames=NULL, ge
     if(nf==1){
       if(intensity==T){
         intensity_mean <- ByteGenerator(1, fr, bitspersample, intensity=T)
-        close(con)
+        on.exit(close(con))
         return(intensity_mean)
       }else{
         tmpdata[1:(2*w*h)] <- ByteGenerator(1, fr, bitspersample)
         outputimg <- array(tmpdata, dim=c(w,h))
-        close(con)
+        on.exit(close(con))
         return(outputimg)
       }
     }else{
@@ -145,14 +145,14 @@ readTIFF2 <- function(filename, start=1, end=0, crop=c(0,0,0,0), frames=NULL, ge
         for (j in 1:nf) {
           intensity_mean[j] <- ByteGenerator(1, fr[j], bitspersample, intensity=T)
         }
-        close(con)
+        on.exit(close(con))
         return(intensity_mean)
       }else{
         for (j in 1:nf) {
           tmpdata[((j-1)*w*h+1):(j*w*h)] <- ByteGenerator(1, fr[j], bitspersample)
         }
         outputimg <- array(tmpdata, dim=c(w,h,nf))
-        close(con)
+        on.exit(close(con))
         return(outputimg)
       }
     }
@@ -162,18 +162,18 @@ readTIFF2 <- function(filename, start=1, end=0, crop=c(0,0,0,0), frames=NULL, ge
         for(i in 1:nch){
           intensity_mean[i] <- ByteGenerator(i, 1, bitspersample, intensity=T)
         }
-        close(con)
+        on.exit(close(con))
         return(intensity_mean)
       }else{
         for(i in 1:nch){
           tmpdatatmpdata[((i-1)*w*h+1):(i*w*h)] <- ByteGenerator(i, 1, bitspersample)
         }
         outputimg <- array(tmpdata, dim=c(w,h,nch))
-        close(con)
+        on.exit(close(con))
         return(outputimg)
       }
     }else{
-      close(con)
+      on.exit(close(con))
       stop("Multiple frames is only supported for grayscale images.")
     }
   }

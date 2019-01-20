@@ -6,7 +6,7 @@
 #' @param vec A raw vector.
 #' @export
 raw2intC <- function(vec) {
-    .Call('dipr_raw2intC', PACKAGE = 'dipr', vec)
+    .Call('_dipr_raw2intC', PACKAGE = 'dipr', vec)
 }
 
 #' Image roll mean
@@ -16,7 +16,7 @@ raw2intC <- function(vec) {
 #' @param n window.
 #' @export
 rollmeanimgC <- function(obj, dim, n) {
-    .Call('dipr_rollmeanimgC', PACKAGE = 'dipr', obj, dim, n)
+    .Call('_dipr_rollmeanimgC', PACKAGE = 'dipr', obj, dim, n)
 }
 
 #' Image roll mean
@@ -26,7 +26,7 @@ rollmeanimgC <- function(obj, dim, n) {
 #' @param n window.
 #' @export
 rollmedianimgC <- function(obj, dim, n) {
-    .Call('dipr_rollmedianimgC', PACKAGE = 'dipr', obj, dim, n)
+    .Call('_dipr_rollmedianimgC', PACKAGE = 'dipr', obj, dim, n)
 }
 
 #' Extract features
@@ -38,7 +38,7 @@ rollmedianimgC <- function(obj, dim, n) {
 #' @param nz z dimension.
 #' @export
 sfeaturesC <- function(obj, ref, nx, ny, nz) {
-    .Call('dipr_sfeaturesC', PACKAGE = 'dipr', obj, ref, nx, ny, nz)
+    .Call('_dipr_sfeaturesC', PACKAGE = 'dipr', obj, ref, nx, ny, nz)
 }
 
 #' Multiply a number by two
@@ -49,6 +49,6 @@ sfeaturesC <- function(obj, ref, nx, ny, nz) {
 #' @param op Operation, either - or *
 #' @export
 sweepC <- function(obj, m, dim, op) {
-    .Call('dipr_sweepC', PACKAGE = 'dipr', obj, m, dim, op)
+    .Call('_dipr_sweepC', PACKAGE = 'dipr', obj, m, dim, op)
 }
 
